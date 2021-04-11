@@ -77,7 +77,7 @@ class GameContext:
 
         # Randomly shuffle areas across zones
         random.shuffle(areas)
-        self.zones = [Zone([areas.pop(), areas.pop()]) for i in range(3)]
+        self.zones = [Zone([areas.pop(), areas.pop()]) for _ in range(3)]
         for z in self.zones:
             for a in z.areas:
                 a.zone = z
@@ -161,6 +161,8 @@ class GameContext:
     def play(self, debug=False):
         game_hash = ""
         turn = random.randint(0, len(self.turn_order) - 1)
+
+        # TODO(analytics) Game started with `len(self.players)`` players
         while True:
             # Hash each successive game state
             # (effectively Reduce(states, lambda a, b: hash(a + b)))
@@ -179,6 +181,9 @@ class GameContext:
                 turn = 0
                 self.round_count += 1
                 self.turn_order = list(self.players)
+
+        # TODO(analytics) Game ended with winners `winners` after
+        # `self.round_count` turns
 
         if debug:
             return game_hash

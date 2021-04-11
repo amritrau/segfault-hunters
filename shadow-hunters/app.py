@@ -278,7 +278,6 @@ def on_start(json):
         return
     rooms[room_id]['gc'] = gc
     rooms[room_id]['status'] = 'GAME'
-
     R.connection_lock.release()
 
     # Send public and private game states to frontend
@@ -432,6 +431,7 @@ def on_join(json):
             return
         rooms[room_id] = {'status': 'LOBBY', 'gc': None,
                           'connections': {}, 'reconnections': {}}
+        # ANALYTICS New room created
 
     # If this is a reconnection event, change player's socket id and AI status
     # in game context
@@ -489,6 +489,7 @@ def on_disconnect():
         socketio.close_room(room_id)
         rooms.pop(room_id)
         R.connection_lock.release()
+        # ANALYTICS Room `room_id` closed
 
     elif gc and not gc.game_over:
 
